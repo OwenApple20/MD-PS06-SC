@@ -295,16 +295,21 @@ What was the observed `income` value for Maine (row 2)? What was the prediction 
 ::: {.callout-important icon="false" collapse="false" title="Problem 16 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+hate_crimes |>
+  filter(state == "Maine") |>
+  select(state, income, hs, urbanization) |>
+  kable()
+# Prediction for Maine
+predict(med_income_model, newdata = data.frame(urbanization = "low", hs = 90))
 ```
 
-* Delete this and put your text answer here.
+* The observed income value for Maine is $51710.
 
-* Delete this and put your text answer here.
+* The models prediction for a state like Maine is $57752.93.
 
-* Delete this and put your text answer here.
+* The residual for this data point is $(`r -(51710 - 57752.93)`).
 
-* Delete this and put your text answer here.
+* Based on the residual, we can see that our model has overestimated the income value for Maine.
 :::
 
 # Independent Analysis
@@ -349,7 +354,17 @@ Generate a regression model with `voles` as the response variable `y` and `veg` 
 ::: {.callout-important icon="false" collapse="false" title="Problem 17 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+voles_mod <- lm(voles ~ veg + soil, data = vole_trapping)
+voles_mod
+ggplot(voles_mod, aes(x = veg, y = voles, color = soil)) +
+  geom_point() +
+  geom_parallel_slopes(method = "lm", se = FALSE) + 
+  labs(
+    x = "Percent cover of vegetation", 
+    y = "Number of Voles", 
+    title = "Parallel Slopes: Number of Voles versus vegetation count based on soil humidity") + 
+  theme_bw() + 
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 :::
 
