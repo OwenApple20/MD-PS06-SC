@@ -103,7 +103,7 @@ Do you think the relationship between `hs` and `income` is strong or weak, linea
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
-* Delete this and put your text answer here.
+* There appears to be a fairly strong relationship between `hs` and `income`. This relationship also appears to be linear.
 :::
 
 ::: {.callout-note icon="false" title="Problem 2"}
@@ -113,10 +113,15 @@ Which regression line (high `urbanization` or low `urbanization`) in @fig-urb ha
 ::: {.callout-important icon="false" collapse="false" title="Problem 2 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+mod_full <- lm(income ~ hs + urbanization + hs:urbanization, data = hate_crimes)
+kable(get_regression_table(mod_full))
+# Intersect when Urbanization is high:
+coef(mod_full)[1]
+# Intersect when Urbanization is low:
+coef(mod_full)[1] + coef(mod_full)[3]
 ```
 
-* Delete this and put your text answer here.
+* The high urbanization regression line has the larger intersect.
 :::
 
 ::: {.callout-note icon="false" title="Problem 3"}
@@ -124,7 +129,7 @@ Does the slope look fairly similar (parallel) for the two levels of urbanization
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 3 Answers"}
-* Delete this and put your text answer here.
+* The slopes do look fairly similar for the two levels of urbanization.
 :::
 
 ::: {.callout-note icon="false" title="Problem 4"}
@@ -132,11 +137,11 @@ Based on the data visualization in @fig-urb, and your answer to 3, do you think 
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 4 Answers"}
-* Delete this and put your text answer here.
+* Based on the data visualization in the figure and our answer to question 3, I think it is a better idea to use the simpler, parallel slopes model. 
 
 ```{r}
 # Type your code and comments inside the code chunk
-
+lm(income ~ hs + urbanization, data = hate_crimes)
 ```
 :::
 
@@ -147,7 +152,10 @@ Create a data visualization comparing median household income at "low" and "high
 ::: {.callout-important icon="false" collapse="false" title="Problem 5 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+ggplot(hate_crimes, aes(x = urbanization, y = income)) +
+  geom_boxplot(fill = "cyan") +
+  theme_bw() +
+  labs(x = "Urbanization Level", y = "Median household income in USD $", title = "Median ousehold income and Urbanization")
 ```
 :::
 
@@ -159,12 +167,23 @@ Run a linear regression model that examines the relationship between household `
 ```{r}
 library(scales)  # Used to format numbers and for dollars
 # Type your code and comments inside the code chunk
-
+med_income_model <- lm(income ~ hs + urbanization, data = hate_crimes)
+kable(get_regression_table(med_income_model))
 ```
 
 ```{r}
 # Type your code and comments here
-
+ggplot(data = med_income_model, 
+       aes(y = income, x = hs, color = urbanization)) +
+  geom_point()+ 
+  geom_parallel_slopes(method = "lm", se = FALSE) + 
+  labs(
+    x = "Percent of adults with high-school degree", 
+    y = "Median household income in USD $", 
+    title = "Parallel Slopes: Income versus education in states with 
+    differing levels of urbanization") + 
+  theme_bw() + 
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 :::
 
@@ -173,7 +192,7 @@ Is the intercept the same for the states with a "low" and "high" level of urbani
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 7 Answers"}
-* Delete this and put your text answer here.
+* The intercept for the states with "low" and "high" levels of urbanization are not the same, while the slopes are the same.
 :::
 
 ::: {.callout-note icon="false" title="Problem 8"}
@@ -183,12 +202,15 @@ What is the slope for the regression line of the states with a "high" level of u
 ::: {.callout-important icon="false" collapse="false" title="Problem 8 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+med_income_model
+coef(med_income_model)[2]
+coef(med_income_model)[1]
+coef(med_income_model)[1] + coef(med_income_model)[3]
 ```
 
-* Delete this and put your text answer here.
+* The slope for the regression line with a "high" level of urbanization $`r round(coef(med_income_model)[2], digits = 2)`.
 
-* Delete this and put your text answer here.
+* The intercept for the regression line with a "high" level of urbanization $(113725.20).
 :::
 
 ::: {.callout-note icon="false" title="Problem 9"}
@@ -196,9 +218,9 @@ What is the slope for the regression line of the states with a "low" level of ur
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 9 Answers"}
-* Delete this and put your text answer here.
+* The slope for the regression line with a "low" level of urbanization $`r round(coef(med_income_model)[2], digits = 2)`.
 
-* Delete this and put your text answer here.
+* The intercept for the regression line with a "low" level of urbanization $(121058.50).
 :::
 
 ::: {.callout-note icon="false" title="Problem 10"}
@@ -206,7 +228,7 @@ Based on your regression table output (and the data visualizations), is median h
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 10 Answers"}
-* Delete this and put your text answer here.
+* The median household income is greater in states that have a higher level of urbanization. The median income is higher by about  $`r -1*round(coef(med_income_model)[3], digits = 2)`
 :::
 
 ::: {.callout-note icon="false" title="Problem 11"}
@@ -214,7 +236,7 @@ For every increase in 1 percentage point of high-school educated adults, what is
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 11 Answers"}
-* Delete this and put your text answer here.
+* For every 1 percentage point increase of high-school educated adults, there is an associated increase in median income of $`r round(coef(med_income_model)[2], digits = 2)`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 12"}
@@ -229,7 +251,7 @@ $$\widehat{\text{income}} = `r comma(coef(summary(med_income_model))[1])` + `r r
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 12 Answers"}
-- Your $LaTeX$ answer here.
+- $\widehat{\text{income}} = `r comma(coef(summary(med_income_model))[1])` + `r round(coef(summary(med_income_model))[2],2)` \times \text{hs}`r round(coef(summary(med_income_model))[3],2)` \times (0)$
 :::
 
 ::: {.callout-note icon="false" title="Problem 13"}
@@ -239,10 +261,10 @@ What would you predict as the median household income for a state with a **high*
 ::: {.callout-important icon="false" collapse="false" title="Problem 13 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+predict(med_income_model, newdata = data.frame(urbanization = "high", hs = 85))
 ```
 
-* Delete this and put your text answer here.
+* I would predict the median household income to be $55152.28.
 :::
 
 ::: {.callout-note icon="false" title="Problem 14"}
@@ -252,10 +274,10 @@ What would you predict as the median household income for a state with a **low**
 ::: {.callout-important icon="false" collapse="false" title="Problem 14 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+predict(med_income_model, newdata = data.frame(urbanization = "low", hs = 85))
 ```
 
-* Delete this and put your text answer here.
+* I would predict the median household income to be $47818.96.
 :::
 
 ::: {.callout-note icon="false" title="Problem 15"}
@@ -263,7 +285,7 @@ What would you predict as the median household income for a state with a **low**
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 15 Answers"}
-* Delete this and put your text answer here.
+* It would not be appropriate to predict the median household income with a "low" level of urbanization and a 30% high school graduation percentage. This is because that would be extrapolation, and the predicted value is negative, which doesn't make sense.
 :::
 
 ::: {.callout-note icon="false" title="Problem 16"}
