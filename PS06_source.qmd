@@ -373,7 +373,7 @@ Would you recommend to a manager that they try to protect sites with high or low
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 18 Answers"}
-* Delete this and put your text answer here.
+* I would recommend to a manager to protect sites with a high percent of vegetation cover because there would most likely be more Voles there.
 :::
 
 ::: {.callout-note icon="false" title="Problem 19"}
@@ -381,11 +381,11 @@ Dry sites are typically a lot less money to purchase and maintain for conservati
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 19 Answers"}
-* Delete this and put your text answer here.
+* To have around 30 voles on this sight, the vegetation coverage percentage would have to be around 56.12%.
 
 ```{r}
 # Type your code and comments inside the code chunk
-
+(30 - coef(voles_mod)[1]) / (coef(voles_mod)[2])
 ```
 :::
 
@@ -396,11 +396,11 @@ The Nature Conservancy is looking at purchasing a site for this species (in the 
 ::: {.callout-important icon="false" collapse="false" title="Problem 20 Answers"}
 ```{r}
 # Type your code and comments inside the code chunk
-
+predict(voles_mod, newdata = data.frame(soil = "moist", veg = 40))
 
 ```
 
-* Delete this and put your text answer here.
+* I would predict the possible vole population the site would be able to support is around 34 or 35 voles.
 :::
 
 # Turning in Your Work
